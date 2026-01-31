@@ -1,6 +1,7 @@
 import express from "express";
 import importJobs from "../services/jobImporter.service.js";
 import ImportLog from "../models/ImportLog.js"; 
+import connectDB from "../config/db.js";
 
 const router = express.Router();
 
@@ -18,8 +19,11 @@ router.post("/run", async (req, res) => {
 });
 
 
+
 router.get("/logs", async (req, res) => {
   try {
+    await connectDB(); 
+
     const logs = await ImportLog.find().sort({ createdAt: -1 });
     res.status(200).json(logs);
   } catch (err) {
@@ -29,3 +33,4 @@ router.get("/logs", async (req, res) => {
 });
 
 export default router;
+
